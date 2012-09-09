@@ -1,7 +1,26 @@
 #!/usr/bin/python
 
 # Written by Rainer Poisel <rainer.poisel@gmail.com>
-# Released under the GPLv3 License
+# Released under the MIT license:
+# Copyright (c) 2012 Rainer Poisel <rainer.poisel@gmail.com>
+
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including without
+# limitation the rights to use, copy, modify, merge, publish, distribute,
+# sublicense, and/or sell copies of the Software, and to permit persons to whom
+# the Software is furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 import sys
 import os
@@ -43,11 +62,11 @@ class CGeneratorContext(object):
     default_verbose = False
     default_forceextract = False
     default_gmapsupp_img = 'gmapsupp.img'
-    default_wd = '.'
+    default_wd = 'work'
     default_pattern = "[7,6]*.img"
     default_download_dir = '.'
     default_layout = 'thin'
-    default_download_file = None
+    default_download_file = 'download.txt'
 
     @staticmethod
     def is_exe(pPath):
@@ -171,9 +190,11 @@ http://www.anpo.republika.pl/download.html#gmaptool
 def main():
     lParser = argparse.ArgumentParser(description="OpenMTBMap Accumulator",
                   epilog="Example: python " + sys.argv[0] +
-                   " -g gmapsupp.img -w \\ /mnt/pod/geo/osm/openmtbmap" +
-                   " -p '[7,6]*.img' -d \\ "
-                   "/mnt/pod/geo/osm/openmtbmap.txt -l thin")
+                   " -g " + CGeneratorContext.default_gmapsupp_img +
+                   " -w " + CGeneratorContext.default_wd +
+                   " -p '" + CGeneratorContext.default_pattern + "'" +
+                   " -d " + CGeneratorContext.default_download_file +
+                   " -l thin")
     lOptionDescs = []
     lOptionDescs.append({'short': '-v',
         'long': '--verbose',
