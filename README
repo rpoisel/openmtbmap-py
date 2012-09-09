@@ -3,8 +3,10 @@ openmtbmap-linux
 
 This script represents the batch-file of the openmtbmap-project (http://www.openmtbmap.org) converted into a Python script. 
 
-Usage: create_gmapsupp_img.py [-h] [-v] [-g GMAPSUPP] [-w WD] [-e] [-p PATTERN] [-d DOWNLOAD] [-l LAYOUT]
-Example: python ./create_gmapsupp_img.py -g gmapsupp.img -w work -p '[7,6]*.img' -d download.txt -l thin
+Usage: create_gmapsupp_img.py [-h] [-v] [-g GMAPSUPP] [-w WD] [-e] \
+            [-p PATTERN] [-d DOWNLOAD] [-l LAYOUT]
+Example: python ./create_gmapsupp_img.py -g gmapsupp.img -w work \
+            -p '[7,6]*.img' -d download.txt -l thin
 
 Depending on the shell used the pattern definition has to be surrounded by ticks (') in order to prevent the shell to replace it with matching file names. 
 
