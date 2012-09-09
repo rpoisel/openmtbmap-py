@@ -45,7 +45,7 @@ class CGeneratorContext(object):
     default_gmapsupp_img = 'gmapsupp.img'
     default_wd = '.'
     default_pattern = "[7,6]*.img"
-    default_download_dir = 'download'
+    default_download_dir = '.'
     default_layout = 'thin'
     default_download_file = None
 
@@ -97,9 +97,6 @@ http://www.anpo.republika.pl/download.html#gmaptool
         return (lProcess.wait(), lProcess.stderr.read())
 
     def run_curl(self, pLocalFile, pUrl):
-#        lProcess = subprocess.Popen([CGeneratorContext.cmd_curl] +
-#                pArgs, stderr=subprocess.PIPE)
-#        return (lProcess.wait(), lProcess.stderr.read())
         lWriter = CurlWriter(pLocalFile)
         lCurl = pycurl.Curl()
         lCurl.setopt(pycurl.URL, pUrl)
@@ -174,7 +171,7 @@ http://www.anpo.republika.pl/download.html#gmaptool
 def main():
     lParser = argparse.ArgumentParser(description="OpenMTBMap Accumulator",
                   epilog="Example: python " + sys.argv[0] +
-                   " -g /tmp/gmapsupp.img -w \\ /mnt/pod/geo/osm/openmtbmap" +
+                   " -g gmapsupp.img -w \\ /mnt/pod/geo/osm/openmtbmap" +
                    " -p '[7,6]*.img' -d \\ "
                    "/mnt/pod/geo/osm/openmtbmap.txt -l thin")
     lOptionDescs = []
@@ -237,29 +234,16 @@ with white forest - optimized for Oregon/Colorado dull displays)
                 dest=lOptionDesc['dest'],
                 default=lOptionDesc['default'],
                 help=lOptionDesc['help'])
-    #(lOptions, lArgs) = lParser.parse_args()
     lOptions = lParser.parse_args()
 
     if len(sys.argv) == 1:
         lParser.print_help()
         sys.exit(0)
 
-#    if lOptions.help is True:
-#        print("Usage: python " + sys.argv[0] + " [options]")
-#        print("""
-#Options:
-#                """)
-#        for lOptionDesc in lOptionDescs:
-#            print("""   %(short)s %(long)15s \
-#| %(help)s [default: %(default)s] \n""" % lOptionDesc)
-#        print("Example: python " + sys.argv[0] + """ -g /tmp/gmapsupp.img \
-#-w /mnt/pod/geo/osm/openmtbmap -p '[7,6]*.img' \
-#-d /mnt/pod/geo/osm/openmtbmap/home.txt -l thin
-#""")
-#        sys.exit(0)
-
     try:
         lContext = CGeneratorContext(lOptions.wd)
+        lDirDownload = os.path.join(lOptions.wd,
+                CGeneratorContext.default_download_dir)
 
         if lOptions.download is not None:
             # create download directory if it does not exist in the wd
@@ -273,27 +257,24 @@ with white forest - optimized for Oregon/Colorado dull displays)
             for lLine in lFH:
                 lUrl = lLine.rstrip()
                 lFilename = lUrl[lUrl.rfind('/') + 1:]
-                lLocalFile = os.path.join(lOptions.wd,
-                        CGeneratorContext.default_download_dir,
-                        lFilename)
-                if os.path.exists(lLocalFile):
-                    lStatBefore = os.stat(lLocalFile)
-                else:
-                    lStatBefore = None
-#                lContext.run_curl(["-z",
-#                    lLocalFile,
-#                    "-o",
-#                    lLocalFile,
-#                    lUrl])
+                lLocalFile = os.path.join(lDirDownload, lFilename)
+#                if os.path.exists(lLocalFile):
+#                    lStatBefore = os.stat(lLocalFile)
+#                else:
+#                    lStatBefore = None
                 lContext.run_curl(lLocalFile, lUrl)
-                lStatAfter = os.stat(lLocalFile)
+#                lStatAfter = os.stat(lLocalFile)
                 # extract the files with yes to all queries to the wd
-                if lOptions.forceextract or lStatBefore != lStatAfter:
+                # do this for all files in the working directory
+#                if lOptions.forceextract or lStatBefore != lStatAfter:
+
+        for lEntry in os.listdir(lDirDownload):
+            lFileData = os.path.join(lDirDownload, lEntry)
+            if os.path.isfile(lFileData) and \
+                fnmatch.fnmatch(lEntry, "mtb*.exe"):
                     lContext.run_sevenzip(["x", "-y",
                         "-o" + lOptions.wd,
-                        os.path.join(lOptions.wd,
-                        CGeneratorContext.default_download_dir,
-                        lFilename]))
+                        lFileData])
 
         lContext.generate_gmapsupp(lOptions.layout,
                 lOptions.gmapsupp,
