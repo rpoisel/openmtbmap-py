@@ -78,10 +78,10 @@ class CGeneratorContext(object):
             self.__mCommandPrefix.append(CGeneratorContext.cmd_wine)
 
     def run_gmt(self, pArgs):
-        if not os.path.exists(self.__mWorkingDir + os.sep +
-                CGeneratorContext.cmd_gmt):
-            raise Exception(self.__mWorkingDir + os.sep +
-            CGeneratorContext.cmd_gmt + """ not found. \
+        if not os.path.exists(os.path.join(self.__mWorkingDir,
+                CGeneratorContext.cmd_gmt)):
+            raise Exception(os.path.join(self.__mWorkingDir,
+            CGeneratorContext.cmd_gmt) + """ not found. \
 Please put gmt.exe into the same folder in \
 which the maps and this batch are placed. Make \
 sure """ + CGeneratorContext.cmd_gmt + """ is
@@ -92,7 +92,7 @@ which you can download here: \
 http://www.anpo.republika.pl/download.html#gmaptool
 """)
         lProcess = subprocess.Popen(self.__mCommandPrefix +
-                [self.__mWorkingDir + os.sep + CGeneratorContext.cmd_gmt] +
+                [os.path.join(self.__mWorkingDir, CGeneratorContext.cmd_gmt)] +
                 pArgs, stderr=subprocess.PIPE)
         return (lProcess.wait(), lProcess.stderr.read())
 
@@ -136,7 +136,7 @@ http://www.anpo.republika.pl/download.html#gmaptool
         self.run_gmt(lArgs)
 
     def generate_gmapsupp(self, pType, pGmapsuppFile, pPattern):
-        lTypefile = self.__mWorkingDir + os.sep + "01002468.TYP"
+        lTypefile = os.path.join(self.__mWorkingDir, "01002468.TYP")
         lFID = ""
         lOSMMaps = []
         lSRTMMaps = []
@@ -150,13 +150,13 @@ http://www.anpo.republika.pl/download.html#gmaptool
         if lTypFile == "":
             raise LookupError("Typefile not found (" + pType + ")")
         # cp thinat.TYP 01002468.TYP
-        shutil.copyfile(self.__mWorkingDir + os.sep + lTypFile,
+        shutil.copyfile(os.path.join(self.__mWorkingDir, lTypFile),
                 lTypefile)
 
         # determine FID and Map files
         for lFile in os.listdir(self.__mWorkingDir):
             if fnmatch.fnmatch(lFile, pPattern):
-                lOSMMaps.append(self.__mWorkingDir + os.sep + lFile)
+                lOSMMaps.append(os.path.join(self.__mWorkingDir, lFile))
 
         if len(lOSMMaps) > 0 and len(lSRTMMaps) > 0:
             lFID = "7352"
@@ -263,19 +263,19 @@ with white forest - optimized for Oregon/Colorado dull displays)
 
         if lOptions.download is not None:
             # create download directory if it does not exist in the wd
-            if not os.path.exists(lOptions.wd + os.sep +
-                    CGeneratorContext.default_download_dir):
-                os.makedirs(lOptions.wd + os.sep +
-                        CGeneratorContext.default_download_dir)
+            if not os.path.exists(os.path.join(lOptions.wd,
+                CGeneratorContext.default_download_dir)):
+                os.makedirs(os.path.join(lOptions.wd,
+                        CGeneratorContext.default_download_dir))
 
             # download the files (curl -z)
             lFH = open(lOptions.download, "r")
             for lLine in lFH:
                 lUrl = lLine.rstrip()
                 lFilename = lUrl[lUrl.rfind('/') + 1:]
-                lLocalFile = lOptions.wd + os.sep + \
-                        CGeneratorContext.default_download_dir + \
-                        os.sep + lFilename
+                lLocalFile = os.path.join(lOptions.wd,
+                        CGeneratorContext.default_download_dir,
+                        lFilename)
                 if os.path.exists(lLocalFile):
                     lStatBefore = os.stat(lLocalFile)
                 else:
@@ -291,9 +291,9 @@ with white forest - optimized for Oregon/Colorado dull displays)
                 if lOptions.forceextract or lStatBefore != lStatAfter:
                     lContext.run_sevenzip(["x", "-y",
                         "-o" + lOptions.wd,
-                        lOptions.wd + os.sep +
-                        CGeneratorContext.default_download_dir +
-                        os.sep + lFilename])
+                        os.path.join(lOptions.wd,
+                        CGeneratorContext.default_download_dir,
+                        lFilename]))
 
         lContext.generate_gmapsupp(lOptions.layout,
                 lOptions.gmapsupp,
