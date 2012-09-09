@@ -1,4 +1,4 @@
-openmtbmap-linux
+openmtbmap-py
 ================
 
 This script represents the batch-file of the openmtbmap-project (http://www.openmtbmap.org) converted into a Python script. 
