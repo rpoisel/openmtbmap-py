@@ -3,8 +3,11 @@ openmtbmap-py
 
 This script represents the batch-file of the openmtbmap-project (http://www.openmtbmap.org) converted into a Python script. 
 
+Requirements: Python (> 2.6), pycurl (http://pycurl.sourceforge.net/)
+
 Usage: create_gmapsupp_img.py [-h] [-v] [-g GMAPSUPP] [-w WD] [-e] \
             [-p PATTERN] [-d DOWNLOAD] [-l LAYOUT]
+
 Example: python ./create_gmapsupp_img.py -g gmapsupp.img -w work \
             -p '[7,6]*.img' -d download.txt -l thin
 
