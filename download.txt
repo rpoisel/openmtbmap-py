@@ -1,0 +1,1 @@
+ftp://ftp5.gwdg.de/pub/misc/openstreetmap/openmtbmap/mtbaustria.exe
