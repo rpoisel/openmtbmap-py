@@ -71,7 +71,7 @@ class CGeneratorContext(object):
         self.__mWorkingDir = pWorkingDir
         self.__mCommandPrefix = []
         if os.name == 'posix':
-            if CGeneratorContext.which(CGeneratorContext.cmd_wine) == None:
+            if CGeneratorContext.which(CGeneratorContext.cmd_wine) is None:
                 raise Exception(CGeneratorContext.cmd_wine +
                         " needs to be installed to run " +
                         CGeneratorContext.cmd_gmt + " under POSIX-OSes.")
@@ -84,10 +84,10 @@ class CGeneratorContext(object):
             CGeneratorContext.cmd_gmt + """ not found. \
 Please put gmt.exe into the same folder in \
 which the maps and this batch are placed. Make \
-sure """ + CGeneratorContext.cmd_gmt + """ is \
+sure """ + CGeneratorContext.cmd_gmt + """ is
 version 048a or later (gmt.exe included with \
 contourlines download is outdated). \
-""" + CGeneratorContext.cmd_gmt + """ is part of gmaptool \
+""" + CGeneratorContext.cmd_gmt + """ is part of gmaptool
 which you can download here: \
 http://www.anpo.republika.pl/download.html#gmaptool
 """)
@@ -128,7 +128,7 @@ http://www.anpo.republika.pl/download.html#gmaptool
     def join_maps(self, pFID, pTypefile, pOSMMaps, pSRTMMaps, pGmapsuppFile):
         # wine gmt.exe -j -o gmapsupp.img -f 7352 -m "openmtbmap_srtm" \
         #        6*.img 7*.img 01002468.TYP
-        lArgs = ["-j", "-o", pGmapsuppFile, "-f", pFID, "-m", \
+        lArgs = ["-j", "-o", pGmapsuppFile, "-f", pFID, "-m",
                 "openmtbmap_srtm"]
         lArgs += pOSMMaps
         lArgs += pSRTMMaps
@@ -172,10 +172,10 @@ http://www.anpo.republika.pl/download.html#gmaptool
 
 
 def main():
-    lParser = argparse.ArgumentParser(description="OpenMTBMap Accumulator", \
-                  epilog="Example: python " + sys.argv[0] +\
-                   " -g /tmp/gmapsupp.img -w \\ /mnt/pod/geo/osm/openmtbmap" +\
-                   " -p '[7,6]*.img' -d \\ " \
+    lParser = argparse.ArgumentParser(description="OpenMTBMap Accumulator",
+                  epilog="Example: python " + sys.argv[0] +
+                   " -g /tmp/gmapsupp.img -w \\ /mnt/pod/geo/osm/openmtbmap" +
+                   " -p '[7,6]*.img' -d \\ "
                    "/mnt/pod/geo/osm/openmtbmap.txt -l thin")
     lOptionDescs = []
     lOptionDescs.append({'short': '-v',
